@@ -28,6 +28,11 @@ jobs:
           MYSQL_PASSWORD: root
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_ROOT_HOST: "%"
+          MYSQL_CHARSET: utf8mb4
+          MYSQL_COLLATION: utf8mb4_unicode_ci
+          MYSQL_DEFAULT_AUTHENTICATION_PLUGIN: mysql_native_password
+          MYSQL_SKIP_NAME_RESOLVE: 1
+          MYSQL_EXPLICIT_DEFAULTS_FOR_TIMESTAMP: 1
         ports:
           - 3306:3306
         options: >-
@@ -35,11 +40,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
-          --character-set-server=utf8mb4
-          --collation-server=utf8mb4_unicode_ci
-          --default-authentication-plugin=mysql_native_password
-          --skip-name-resolve
-          --explicit_defaults_for_timestamp=1
 
     steps:
       - uses: actions/checkout@v4
