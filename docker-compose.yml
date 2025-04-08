@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - DB_URL=jdbc:mysql://db:3306/eventmanager?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DRIVER=${DB_DRIVER}
+      - SERVER_PORT=${SERVER_PORT}
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+      - WEATHER_API_BASE_URL=${WEATHER_API_BASE_URL}
+    depends_on:
+      - db
+    networks:
+      - eventmanager-network
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=eventmanager
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - eventmanager-network
+
+volumes:
+  mysql-data:
+
+networks:
+  eventmanager-network:
+    driver: bridge
