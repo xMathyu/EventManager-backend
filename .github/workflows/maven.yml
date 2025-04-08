@@ -14,6 +14,11 @@ on:
   pull_request:
     branches: ["main"]
 
+# Add permissions for dependency graph submission
+permissions:
+  contents: write
+  security-events: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
