@@ -2,6 +2,7 @@ package com.technology309.eventmanager.service;
 
 import com.technology309.eventmanager.dto.WeatherResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -9,12 +10,16 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class WeatherService {
     private final RestTemplate restTemplate;
-    private static final String API_KEY = "87af2d40febcec3ad22c55abc098762d";
-    private static final String BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
+    
+    @Value("${WEATHER_API_KEY}")
+    private String apiKey;
+    
+    @Value("${WEATHER_API_BASE_URL}")
+    private String baseUrl;
 
     public String getWeatherData(String location) {
         try {
-            String url = String.format("%s?q=%s&appid=%s&units=metric", BASE_URL, location, API_KEY);
+            String url = String.format("%s?q=%s&appid=%s&units=metric", baseUrl, location, apiKey);
             WeatherResponse response = restTemplate.getForObject(url, WeatherResponse.class);
             
             if (response != null && response.getMain() != null && response.getWeather() != null && response.getWeather().length > 0) {
